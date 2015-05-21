@@ -11,7 +11,7 @@
  *
  */
 
- /**
+/**
 * Please note that most of this code is from the Genesis Featured Post Widget included in the Genesis Framework.
 * I have just added support for Custom Post Types.
 * Pete has added support for Custom Taxonomies.
@@ -37,6 +37,7 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 			'title'                   => '',
 			'post_type'               => 'post',
 			'tax_term'                => '',
+			'post_ID'                 => '',
 			'posts_num'               => 1,
 			'posts_offset'            => 0,
 			'orderby'                 => '',
@@ -102,8 +103,9 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 		echo $before_widget;
 
 		//* Set up the author bio
-		if ( ! empty( $instance['title'] ) )
-			echo $before_title . apply_filters( 'widget_title', $instance['title'], $instance, $this->id_base ) . $after_title;
+		if ( ! empty( $instance['title'] ) ) {
+			printf( $before_title . apply_filters( 'widget_title', $instance['title'], $instance, $this->id_base ) . $after_title );
+		}
 
 		$query_args = array(
 			'post_type' => $instance['post_type'],
@@ -111,6 +113,7 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 			'offset'    => $instance['posts_offset'],
 			'orderby'   => $instance['orderby'],
 			'order'     => $instance['order'],
+			'p'         => $instance['post_ID'],
 		);
 
 		// Extract the custom tax term, if provided
@@ -121,13 +124,14 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 					'taxonomy' => $post_tax,
 					'field'    => 'slug',
 					'terms'    => $post_term,
-				)
+				),
 			);
 		}
 
 		//* Exclude displayed IDs from this loop?
-		if ( $instance['exclude_displayed'] )
+		if ( $instance['exclude_displayed'] ) {
 			$query_args['post__not_in'] = (array) $_genesis_displayed_ids;
+		}
 
 		if ( 'full' !== $instance['columns'] ) {
 			add_filter( 'post_class', array( $this, 'add_post_class_' . $instance['columns'] ) );
@@ -145,7 +149,7 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 				'context' => 'entry',
 			) );
 
-			$size = $instance['image_size'];
+			$size  = $instance['image_size'];
 			$image = apply_filters( 'featured_custom_post_type_image', genesis_get_image( array(
 				'format'  => 'html',
 				'size'    => $instance['image_size'],
@@ -153,8 +157,9 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 				'attr'    => genesis_parse_attr( 'entry-image-widget' ),
 			) ), $size );
 
-			if ( $instance['show_image'] && $image )
+			if ( $instance['show_image'] && $image ) {
 				printf( '<a href="%s" title="%s" class="%s">%s</a>', get_permalink(), the_title_attribute( 'echo=0' ), esc_attr( $instance['image_alignment'] ), $image );
+			}
 
 			if ( ! empty( $instance['show_gravatar'] ) ) {
 				echo '<span class="' . esc_attr( $instance['gravatar_alignment'] ) . '">';
@@ -162,23 +167,24 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 				echo '</span>';
 			}
 
-			if ( $instance['show_title'] )
+			if ( $instance['show_title'] ) {
 				echo genesis_html5() ? '<header class="entry-header">' : '';
 
 				if ( ! empty( $instance['show_title'] ) ) {
-
-					if ( genesis_html5() )
-						printf( '<h2 class="entry-title"><a href="%s" title="%s">%s</a></h2>', get_permalink(), the_title_attribute( 'echo=0' ), get_the_title() );
-					else
-						printf( '<h2><a href="%s" title="%s">%s</a></h2>', get_permalink(), the_title_attribute( 'echo=0' ), get_the_title() );
-
+					$title = sprintf( '<h2><a href="%s" title="%s">%s</a></h2>', get_permalink(), the_title_attribute( 'echo=0' ), get_the_title() );
+					if ( genesis_html5() ) {
+						 $title = sprintf( '<h2 class="entry-title"><a href="%s" title="%s">%s</a></h2>', get_permalink(), the_title_attribute( 'echo=0' ), get_the_title() );
+					}
+					echo $title;
 				}
 
-				if ( ! empty( $instance['show_byline'] ) && ! empty( $instance['post_info'] ) )
+				if ( ! empty( $instance['show_byline'] ) && ! empty( $instance['post_info'] ) ) {
 					printf( genesis_html5() ? '<p class="entry-meta">%s</p>' : '<p class="byline post-info">%s</p>', do_shortcode( $instance['post_info'] ) );
+				}
 
-			if ( $instance['show_title'] )
+			// if ( $instance['show_title'] )
 				echo genesis_html5() ? '</header>' : '';
+			}
 
 			if ( ! empty( $instance['show_content'] ) ) {
 
@@ -218,13 +224,14 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 			remove_filter( 'post_class', array( $this, 'add_post_class_' . $instance['columns'] ) );
 		}
 
-		//* Restore original query
-		wp_reset_query();
+		// Restore original query
+		wp_reset_postdata();
 
 		//* The EXTRA Posts (list)
 		if ( ! empty( $instance['extra_num'] ) ) {
-			if ( ! empty( $instance['extra_title'] ) )
+			if ( ! empty( $instance['extra_title'] ) ) {
 				echo $before_title . esc_html( $instance['extra_title'] ) . $after_title;
+			}
 
 			$offset = intval( $instance['posts_num'] ) + intval( $instance['posts_offset'] );
 
@@ -242,7 +249,7 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 						'taxonomy' => $post_tax,
 						'field'    => 'slug',
 						'terms'    => $post_term,
-					)
+					),
 				);
 			}
 
@@ -260,12 +267,13 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 					$listitems  .= '</li>';
 				}
 
-				if ( mb_strlen( $listitems ) > 0 )
+				if ( mb_strlen( $listitems ) > 0 ) {
 					printf( '<ul>%s</ul>', $listitems );
+				}
 			}
 
 			//* Restore original query
-			wp_reset_query();
+			wp_reset_postdata();
 		}
 
 		if ( ! empty( $instance['more_from_category'] ) && ! empty( $instance['more_from_category_text'] ) && 'any' !== $instance['tax_term'] ) {
@@ -282,7 +290,7 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 		if ( ! empty( $instance['archive_link'] ) && ! empty( $instance['archive_text'] ) ) {
 
 			$archive_url = get_post_type_archive_link( $instance['post_type'] );
-			if( 'post' === $instance[ 'post_type'] ) {
+			if ( 'post' === $instance['post_type'] ) {
 				$postspage   = get_option( 'page_for_posts' );
 				$archive_url = get_permalink( get_post( $postspage )->ID );
 				$frontpage   = get_option( 'show_on_front' );
@@ -379,13 +387,18 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 				</p>
 
 				<p>
+					<label for "<?php echo esc_attr( $this->get_field_id( 'post_ID' ) ); ?>"><?php _e( 'Specific Post/Page ID:', 'featured-custom-post-type-widget-for-genesis' ); ?> </label>
+					<input type="number" min="0" max="100000000" id="<?php echo esc_attr( $this->get_field_id( 'post_ID' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'post_ID' ) ); ?>" value="<?php echo esc_attr( $instance['post_ID'] ); ?>" />
+				</p>
+
+				<p>
 					<label for="<?php echo esc_attr( $this->get_field_id( 'posts_num' ) ); ?>"><?php _e( 'Number of Posts to Show:', 'featured-custom-post-type-widget-for-genesis' ); ?> </label>
-					<input type="text" id="<?php echo esc_attr( $this->get_field_id( 'posts_num' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'posts_num' ) ); ?>" value="<?php echo esc_attr( $instance['posts_num'] ); ?>" size="2" />
+					<input type="number" min="1" max="20" id="<?php echo esc_attr( $this->get_field_id( 'posts_num' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'posts_num' ) ); ?>" value="<?php echo esc_attr( $instance['posts_num'] ); ?>" />
 				</p>
 
 				<p>
 					<label for="<?php echo esc_attr( $this->get_field_id( 'posts_offset' ) ); ?>"><?php _e( 'Number of Posts to Offset:', 'featured-custom-post-type-widget-for-genesis' ); ?> </label>
-					<input type="text" id="<?php echo esc_attr( $this->get_field_id( 'posts_offset' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'posts_offset' ) ); ?>" value="<?php echo esc_attr( $instance['posts_offset'] ); ?>" size="2" />
+					<input type="number" min="0" max="99" id="<?php echo esc_attr( $this->get_field_id( 'posts_offset' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'posts_offset' ) ); ?>" value="<?php echo esc_attr( $instance['posts_offset'] ); ?>" />
 				</p>
 
 				<p>
@@ -467,8 +480,15 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 					<select id="<?php echo esc_attr( $this->get_field_id( 'image_size' ) ); ?>" class="genesis-image-size-selector" name="<?php echo esc_attr( $this->get_field_name( 'image_size' ) ); ?>">
 						<?php
 						$sizes = genesis_get_image_sizes();
-						foreach( (array) $sizes as $name => $size )
-							echo '<option value="' . esc_attr( $name ) . '"' . selected( $name, $instance['image_size'], FALSE ) . '>' . esc_html( $name ) . ' ( ' . absint( $size['width'] ) . 'x' . absint( $size['height'] ) . ' )</option>';
+						foreach ( (array) $sizes as $name => $size ) {
+							printf( '<option value="%s"%s>%s (%sx%s)</option>',
+								esc_attr( $name ),
+								selected( $name, $instance['image_size'], false ),
+								esc_html( $name ),
+								absint( $size['width'] ),
+								absint( $size['height'] )
+							);
+						}
 						?>
 					</select>
 				</p>
@@ -512,7 +532,7 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 					</select>
 					<br />
 					<label for="<?php echo esc_attr( $this->get_field_id( 'content_limit' ) ); ?>"><?php _e( 'Limit content to', 'featured-custom-post-type-widget-for-genesis' ); ?>
-						<input type="text" id="<?php echo esc_attr( $this->get_field_id( 'content_limit' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'content_limit' ) ); ?>" value="<?php echo esc_attr( intval( $instance['content_limit'] ) ); ?>" size="3" />
+						<input type="number" min="0" max="1000" id="<?php echo esc_attr( $this->get_field_id( 'content_limit' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'content_limit' ) ); ?>" value="<?php echo esc_attr( intval( $instance['content_limit'] ) ); ?>" size="3" />
 						<?php _e( 'characters', 'featured-custom-post-type-widget-for-genesis' ); ?>
 					</label>
 				</p>
@@ -535,7 +555,7 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 
 				<p>
 					<label for="<?php echo esc_attr( $this->get_field_id( 'extra_num' ) ); ?>"><?php _e( 'Number of Posts to Show:', 'featured-custom-post-type-widget-for-genesis' ); ?> </label>
-					<input type="text" id="<?php echo esc_attr( $this->get_field_id( 'extra_num' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'extra_num' ) ); ?>" value="<?php echo esc_attr( $instance['extra_num'] ); ?>" size="2" />
+					<input type="number" min="0" max="100" id="<?php echo esc_attr( $this->get_field_id( 'extra_num' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'extra_num' ) ); ?>" value="<?php echo esc_attr( $instance['extra_num'] ); ?>" size="2" />
 				</p>
 
 			</div>
@@ -590,6 +610,7 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 
 		//* Add posts to that post_type_list
 		$item->post_type_list['post'] = 'post';
+		$item->post_type_list['page'] = 'page';
 
 		//* And a list of available taxonomies for the current post type
 		if ( 'any' == $instance['post_type'] ) {
