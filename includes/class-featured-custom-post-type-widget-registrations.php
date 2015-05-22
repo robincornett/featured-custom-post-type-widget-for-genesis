@@ -108,7 +108,6 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 			printf( $before_title . apply_filters( 'widget_title', $instance['title'], $instance, $this->id_base ) . $after_title );
 		}
 
-		$ids = '';
 		if ( ! empty( $instance['post_ID'] ) ) {
 			$ids = explode( ',', str_replace( ' ', '', $instance['post_ID'] ) );
 		}
@@ -119,7 +118,7 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 			'offset'              => $instance['posts_offset'],
 			'orderby'             => $instance['orderby'],
 			'order'               => $instance['order'],
-			'post__in'            => $ids,
+			'post__in'            => ! empty( $instance['post_ID'] ) ? $ids : $instance['post_ID'],
 			'ignore_sticky_posts' => $instance['exclude_sticky'],
 		);
 
