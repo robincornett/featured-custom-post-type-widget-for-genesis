@@ -44,6 +44,7 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 			'order'                   => '',
 			'columns'                 => 'full',
 			'exclude_displayed'       => 0,
+			'exclude_sticky'          => 0,
 			'show_image'              => 0,
 			'image_alignment'         => '',
 			'image_size'              => '',
@@ -114,6 +115,7 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 			'orderby'   => $instance['orderby'],
 			'order'     => $instance['order'],
 			'p'         => $instance['post_ID'],
+			'ignore_sticky_posts' => $instance['exclude_sticky'],
 		);
 
 		// Extract the custom tax term, if provided
@@ -424,6 +426,11 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 				<p>
 					<input id="<?php echo esc_attr( $this->get_field_id( 'exclude_displayed' ) ); ?>" type="checkbox" name="<?php echo esc_attr( $this->get_field_name( 'exclude_displayed' ) ); ?>" value="1" <?php checked( $instance['exclude_displayed'] ); ?>/>
 					<label for="<?php echo esc_attr( $this->get_field_id( 'exclude_displayed' ) ); ?>"><?php _e( 'Exclude Previously Displayed Posts?', 'featured-custom-post-type-widget-for-genesis' ); ?></label>
+				</p>
+
+				<p>
+					<input id="<?php echo esc_attr( $this->get_field_id( 'exclude_sticky' ) ); ?>" type="checkbox" name="<?php echo esc_attr( $this->get_field_name( 'exclude_sticky' ) ); ?>" value="1" <?php checked( $instance['exclude_sticky'] ); ?>/>
+					<label for="<?php echo esc_attr( $this->get_field_id( 'exclude_sticky' ) ); ?>"><?php _e( 'Exclude Sticky Posts?', 'genesis' ); ?></label>
 				</p>
 
 				<p>
