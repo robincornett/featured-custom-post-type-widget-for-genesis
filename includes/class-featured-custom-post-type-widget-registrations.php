@@ -108,13 +108,18 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 			printf( $before_title . apply_filters( 'widget_title', $instance['title'], $instance, $this->id_base ) . $after_title );
 		}
 
+		$ids = '';
+		if ( ! empty( $instance['post_ID'] ) ) {
+			$ids = explode( ',', str_replace( ' ', '', $instance['post_ID'] ) );
+		}
+
 		$query_args = array(
-			'post_type' => $instance['post_type'],
-			'showposts' => $instance['posts_num'],
-			'offset'    => $instance['posts_offset'],
-			'orderby'   => $instance['orderby'],
-			'order'     => $instance['order'],
-			'p'         => $instance['post_ID'],
+			'post_type'           => $instance['post_type'],
+			'showposts'           => $instance['posts_num'],
+			'offset'              => $instance['posts_offset'],
+			'orderby'             => $instance['orderby'],
+			'order'               => $instance['order'],
+			'post__in'            => $ids,
 			'ignore_sticky_posts' => $instance['exclude_sticky'],
 		);
 
@@ -179,12 +184,13 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 					}
 					echo $title;
 				}
+			}
 
-				if ( ! empty( $instance['show_byline'] ) && ! empty( $instance['post_info'] ) ) {
-					printf( genesis_html5() ? '<p class="entry-meta">%s</p>' : '<p class="byline post-info">%s</p>', do_shortcode( $instance['post_info'] ) );
-				}
+			if ( ! empty( $instance['show_byline'] ) && ! empty( $instance['post_info'] ) ) {
+				printf( genesis_html5() ? '<p class="entry-meta">%s</p>' : '<p class="byline post-info">%s</p>', do_shortcode( $instance['post_info'] ) );
+			}
 
-			// if ( $instance['show_title'] )
+			if ( $instance['show_title'] ) {
 				echo genesis_html5() ? '</header>' : '';
 			}
 
@@ -389,8 +395,8 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 				</p>
 
 				<p>
-					<label for "<?php echo esc_attr( $this->get_field_id( 'post_ID' ) ); ?>"><?php _e( 'Specific Post/Page ID:', 'featured-custom-post-type-widget-for-genesis' ); ?> </label>
-					<input type="number" min="0" max="100000000" id="<?php echo esc_attr( $this->get_field_id( 'post_ID' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'post_ID' ) ); ?>" value="<?php echo esc_attr( $instance['post_ID'] ); ?>" />
+					<label for "<?php echo esc_attr( $this->get_field_id( 'post_ID' ) ); ?>"><?php _e( 'Specific Post/Page IDs:', 'featured-custom-post-type-widget-for-genesis' ); ?> </label>
+					<input type="text" id="<?php echo esc_attr( $this->get_field_id( 'post_ID' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'post_ID' ) ); ?>" value="<?php echo esc_attr( $instance['post_ID'] ); ?>" />
 				</p>
 
 				<p>
