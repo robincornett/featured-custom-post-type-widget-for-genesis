@@ -37,6 +37,7 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 			'title'                   => '',
 			'post_type'               => 'post',
 			'tax_term'                => '',
+			'include_exclude'         => '',
 			'post_ID'                 => '',
 			'posts_num'               => 1,
 			'posts_offset'            => 0,
@@ -103,13 +104,9 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 
 		echo $before_widget;
 
-		//* Set up the author bio
+		// Set up the author bio
 		if ( ! empty( $instance['title'] ) ) {
 			printf( $before_title . apply_filters( 'widget_title', $instance['title'], $instance, $this->id_base ) . $after_title );
-		}
-
-		if ( ! empty( $instance['post_ID'] ) ) {
-			$ids = explode( ',', str_replace( ' ', '', $instance['post_ID'] ) );
 		}
 
 		$query_args = array(
@@ -118,9 +115,21 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 			'offset'              => $instance['posts_offset'],
 			'orderby'             => $instance['orderby'],
 			'order'               => $instance['order'],
-			'post__in'            => ! empty( $instance['post_ID'] ) ? $ids : $instance['post_ID'],
 			'ignore_sticky_posts' => $instance['exclude_sticky'],
 		);
+
+		// Add include/exclude to args if needed
+		if ( ! empty( $instance['include_exclude'] ) ) {
+			if ( ! empty( $instance['post_ID'] ) ) {
+				$ids = explode( ',', str_replace( ' ', '', $instance['post_ID'] ) );
+			}
+			if ( 'include' === $instance['include_exclude'] ) {
+				$query_args['post__in'] = $ids;
+			}
+			elseif ( 'exclude' === $instance['include_exclude'] ) {
+				$query_args['post__not_in'] = $ids;
+			}
+		}
 
 		// Extract the custom tax term, if provided
 		if ( 'any' !== $instance['tax_term'] ) {
@@ -426,6 +435,24 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 						<option value="DESC" <?php selected( 'DESC', $instance['order'] ); ?>><?php _e( 'Descending (3, 2, 1)', 'featured-custom-post-type-widget-for-genesis' ); ?></option>
 						<option value="ASC" <?php selected( 'ASC', $instance['order'] ); ?>><?php _e( 'Ascending (1, 2, 3)', 'featured-custom-post-type-widget-for-genesis' ); ?></option>
 					</select>
+				</p>
+
+			</div>
+
+			<div class="genesis-widget-column-box">
+
+				<p>
+					<label for="<?php echo esc_attr( $this->get_field_id( 'include_exclude' ) ); ?>"><?php _e( 'Include/Exclude Specific Posts:', 'featured-custom-post-type-widget-for-genesis' ); ?> </label>
+					<select id="<?php echo esc_attr( $this->get_field_id( 'include_exclude' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'include_exclude' ) ); ?>">
+						<option value="" <?php selected( '', $instance['include_exclude'] ); ?>> -- </option>
+						<option value="include" <?php selected( 'include', $instance['include_exclude'] ); ?>><?php _e( 'Include', 'featured-custom-post-type-widget-for-genesis' ); ?></option>
+						<option value="exclude" <?php selected( 'exclude', $instance['include_exclude'] ); ?>><?php _e( 'Exclude', 'featured-custom-post-type-widget-for-genesis' ); ?></option>
+					</select>
+				</p>
+
+				<p>
+					<label for "<?php echo esc_attr( $this->get_field_id( 'post_ID' ) ); ?>"><?php _e( 'Post/Page IDs to Include/Exclude:', 'featured-custom-post-type-widget-for-genesis' ); ?> </label>
+					<input type="text" id="<?php echo esc_attr( $this->get_field_id( 'post_ID' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'post_ID' ) ); ?>" value="<?php echo esc_attr( $instance['post_ID'] ); ?>" />
 				</p>
 
 				<p>
