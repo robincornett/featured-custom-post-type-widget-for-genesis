@@ -368,48 +368,57 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 			<input type="text" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" value="<?php echo esc_attr( $instance['title'] ); ?>" class="widefat" />
 		</p>
 
+		<div class="genesis-widget-column-box genesis-widget-column-box-top">
+			<p>
+				<label for="<?php echo esc_attr( $this->get_field_id( 'post_type' ) ); ?>"><?php _e( 'Post Type:', 'featured-custom-post-type-widget-for-genesis' ); ?> </label>
+				<select id="<?php echo esc_attr( $this->get_field_id( 'post_type' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'post_type' ) ); ?>" onchange="tax_term_postback('<?php echo esc_attr( $this->get_field_id( 'tax_term' ) ); ?>', this.value);" >
+
+					<?php
+					echo '<option value="any" '. selected( 'any', $instance['post_type'], false ) .'>'. __( 'any', 'featured-custom-post-type-widget-for-genesis' ) .'</option>';
+					foreach ( $item->post_type_list as $post_type_item ) {
+						echo '<option value="'. esc_attr( $post_type_item ) .'"'. selected( esc_attr( $post_type_item ), $instance['post_type'], false ) .'>'. esc_attr( $post_type_item ) .'</option>';
+					}
+
+					?>
+				</select>
+			</p>
+
+			<p>
+				<label for="<?php echo esc_attr( $this->get_field_id( 'tax_term' ) ); ?>"><?php _e( 'Category/Term:', 'featured-custom-post-type-widget-for-genesis' ); ?> </label>
+				<select id="<?php echo esc_attr( $this->get_field_id( 'tax_term' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'tax_term' ) ); ?>">
+
+					<?php
+					echo '<option value="any" '. selected( 'any', $instance['tax_term'], false ) .'>'. __( 'any', 'featured-custom-post-type-widget-for-genesis' ) .'</option>';
+					foreach ( $item->tax_term_list as $tax_term_item ) {
+						$tax_term_desc = $tax_term_item->taxonomy . '/' . $tax_term_item->name;
+						$tax_term_slug = $tax_term_item->taxonomy . '/' . $tax_term_item->slug;
+						echo '<option value="'. esc_attr( $tax_term_slug ) .'"'. selected( esc_attr( $tax_term_slug ), $instance['tax_term'], false ) .'>'. esc_attr( $tax_term_desc ) .'</option>';
+					}
+
+					?>
+				</select>
+			</p>
+
+		</div>
+
 		<div class="genesis-widget-column">
 
-			<div class="genesis-widget-column-box genesis-widget-column-box-top">
-
-				<p>
-					<label for="<?php echo esc_attr( $this->get_field_id( 'post_type' ) ); ?>"><?php _e( 'Post Type:', 'featured-custom-post-type-widget-for-genesis' ); ?> </label>
-					<select id="<?php echo esc_attr( $this->get_field_id( 'post_type' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'post_type' ) ); ?>" onchange="tax_term_postback('<?php echo esc_attr( $this->get_field_id( 'tax_term' ) ); ?>', this.value);" >
-
-						<?php
-						echo '<option value="any" '. selected( 'any', $instance['post_type'], false ) .'>'. __( 'any', 'featured-custom-post-type-widget-for-genesis' ) .'</option>';
-						foreach ( $item->post_type_list as $post_type_item ) {
-							echo '<option value="'. esc_attr( $post_type_item ) .'"'. selected( esc_attr( $post_type_item ), $instance['post_type'], false ) .'>'. esc_attr( $post_type_item ) .'</option>';
-						}
-
-						?>
-					</select>
-				</p>
-
-				<p>
-					<label for="<?php echo esc_attr( $this->get_field_id( 'tax_term' ) ); ?>"><?php _e( 'Category/Term:', 'featured-custom-post-type-widget-for-genesis' ); ?> </label>
-					<select id="<?php echo esc_attr( $this->get_field_id( 'tax_term' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'tax_term' ) ); ?>">
-
-						<?php
-						echo '<option value="any" '. selected( 'any', $instance['tax_term'], false ) .'>'. __( 'any', 'featured-custom-post-type-widget-for-genesis' ) .'</option>';
-						foreach ( $item->tax_term_list as $tax_term_item ) {
-							$tax_term_desc = $tax_term_item->taxonomy . '/' . $tax_term_item->name;
-							$tax_term_slug = $tax_term_item->taxonomy . '/' . $tax_term_item->slug;
-							echo '<option value="'. esc_attr( $tax_term_slug ) .'"'. selected( esc_attr( $tax_term_slug ), $instance['tax_term'], false ) .'>'. esc_attr( $tax_term_desc ) .'</option>';
-						}
-
-						?>
-					</select>
-				</p>
-
-				<p>
-					<label for "<?php echo esc_attr( $this->get_field_id( 'post_ID' ) ); ?>"><?php _e( 'Specific Post/Page IDs:', 'featured-custom-post-type-widget-for-genesis' ); ?> </label>
-					<input type="text" id="<?php echo esc_attr( $this->get_field_id( 'post_ID' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'post_ID' ) ); ?>" value="<?php echo esc_attr( $instance['post_ID'] ); ?>" />
-				</p>
+			<div class="genesis-widget-column-box">
 
 				<p>
 					<label for="<?php echo esc_attr( $this->get_field_id( 'posts_num' ) ); ?>"><?php _e( 'Number of Posts to Show:', 'featured-custom-post-type-widget-for-genesis' ); ?> </label>
 					<input type="number" min="1" max="20" id="<?php echo esc_attr( $this->get_field_id( 'posts_num' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'posts_num' ) ); ?>" value="<?php echo esc_attr( $instance['posts_num'] ); ?>" />
+				</p>
+
+				<p>
+					<label for="<?php echo esc_attr( $this->get_field_id( 'columns' ) ); ?>"><?php _e( 'Number of Columns:', 'featured-custom-post-type-widget-for-genesis' ); ?> </label>
+					<select id="<?php echo esc_attr( $this->get_field_id( 'columns' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'columns' ) ); ?>">
+						<option value="full" <?php selected( 'full', $instance['columns'] ); ?>>1</option>
+						<option value="one_half" <?php selected( 'one_half', $instance['columns'] ); ?>>2</option>
+						<option value="one_third" <?php selected( 'one_third', $instance['columns'] ); ?>>3</option>
+						<option value="one_fourth" <?php selected( 'one_fourth', $instance['columns'] ); ?>>4</option>
+						<option value="one_sixth" <?php selected( 'one_sixth', $instance['columns'] ); ?>>6</option>
+					</select>
 				</p>
 
 				<p>
@@ -463,17 +472,6 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 				<p>
 					<input id="<?php echo esc_attr( $this->get_field_id( 'exclude_sticky' ) ); ?>" type="checkbox" name="<?php echo esc_attr( $this->get_field_name( 'exclude_sticky' ) ); ?>" value="1" <?php checked( $instance['exclude_sticky'] ); ?>/>
 					<label for="<?php echo esc_attr( $this->get_field_id( 'exclude_sticky' ) ); ?>"><?php _e( 'Exclude Sticky Posts?', 'genesis' ); ?></label>
-				</p>
-
-				<p>
-					<label for="<?php echo esc_attr( $this->get_field_id( 'columns' ) ); ?>"><?php _e( 'Number of Columns:', 'featured-custom-post-type-widget-for-genesis' ); ?> </label>
-					<select id="<?php echo esc_attr( $this->get_field_id( 'columns' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'columns' ) ); ?>">
-						<option value="full" <?php selected( 'full', $instance['columns'] ); ?>>1</option>
-						<option value="one_half" <?php selected( 'one_half', $instance['columns'] ); ?>>2</option>
-						<option value="one_third" <?php selected( 'one_third', $instance['columns'] ); ?>>3</option>
-						<option value="one_fourth" <?php selected( 'one_fourth', $instance['columns'] ); ?>>4</option>
-						<option value="one_sixth" <?php selected( 'one_sixth', $instance['columns'] ); ?>>6</option>
-					</select>
 				</p>
 
 			</div>
@@ -548,7 +546,7 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 
 		<div class="genesis-widget-column genesis-widget-column-right">
 
-			<div class="genesis-widget-column-box genesis-widget-column-box-top">
+			<div class="genesis-widget-column-box">
 
 				<p>
 					<input id="<?php echo esc_attr( $this->get_field_id( 'show_title' ) ); ?>" type="checkbox" name="<?php echo esc_attr( $this->get_field_name( 'show_title' ) ); ?>" value="1" <?php checked( $instance['show_title'] ); ?>/>
