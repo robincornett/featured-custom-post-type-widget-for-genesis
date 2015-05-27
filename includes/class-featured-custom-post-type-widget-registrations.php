@@ -649,19 +649,14 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 		$item->post_type_list['post'] = 'post';
 		$item->post_type_list['page'] = 'page';
 
-		//* And a list of available taxonomies for the current post type
-		if ( 'any' == $instance['post_type'] ) {
+		// And a list of available taxonomies for the current post type
+		$taxonomies = get_object_taxonomies( $instance['post_type'] );
+		if ( 'any' === $instance['post_type'] ) {
 			$taxonomies = get_taxonomies();
-		} else {
-			$taxonomies = get_object_taxonomies( $instance['post_type'] );
 		}
 
-		//* And from there, a list of available terms in that tax
-		$tax_args = array(
-			'hide_empty' => 0,
-		);
-		$item->tax_term_list = get_terms( $taxonomies, $tax_args );
-		usort( $item->tax_term_list, array( $this, 'tax_term_compare' ) );
+		// And from there, a list of available terms in that tax
+		$item->tax_term_list = $this->compile_taxonomies( $taxonomies );
 
 		return $item;
 	}
@@ -670,25 +665,31 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 	 * build list of taxonomies for ajax revised dropdown
 	 * @return $item list of taxonomies
 	 */
-	function build_ajax_list() {
+	protected function build_ajax_list() {
 
 		$item = new stdClass;
-		//* Fetch a list of available taxonomies for the current post type
-		if ( 'any' == $_POST['post_type'] ) {
+		// Fetch a list of available taxonomies for the current post type
+		$taxonomies = get_object_taxonomies( $_POST['post_type'] );
+		if ( 'any' === $_POST['post_type'] ) {
 			$taxonomies = get_taxonomies();
-		} else {
-			$taxonomies = get_object_taxonomies( $_POST['post_type'] );
 		}
 
-		//* And from there, a list of available terms in that tax
-		$tax_args = array(
-			'hide_empty' => 0,
-		);
-		$item->tax_term_list = get_terms( $taxonomies, $tax_args );
-		usort( $item->tax_term_list, array( $this, 'tax_term_compare' ) );
+		// And from there, a list of available terms in that tax
+		$item->tax_term_list = $this->compile_taxonomies( $taxonomies );
 
 		return $item;
 
+	}
+
+	protected function compile_taxonomies( $taxonomies ) {
+
+		$tax_args = array(
+			'hide_empty' => 0,
+		);
+		$tax_term_list = get_terms( $taxonomies, $tax_args );
+		usort( $tax_term_list, array( $this, 'tax_term_compare' ) );
+
+		return $tax_term_list;
 	}
 
 	/**
