@@ -31,7 +31,7 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 	 *
 	 * @since 0.1.8
 	 */
-	function __construct() {
+	public function __construct() {
 
 		$this->defaults = array(
 			'title'                   => '',
@@ -93,7 +93,7 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 	 * @param array $args Display arguments including before_title, after_title, before_widget, and after_widget.
 	 * @param array $instance The settings for the particular instance of the widget
 	 */
-	function widget( $args, $instance ) {
+	public function widget( $args, $instance ) {
 
 		global $wp_query, $_genesis_displayed_ids;
 
@@ -340,7 +340,7 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 	 * @param array $old_instance Old settings for this instance
 	 * @return array Settings to save or bool false to cancel saving
 	 */
-	function update( $new_instance, $old_instance ) {
+	public function update( $new_instance, $old_instance ) {
 
 		$new_instance['title']     = strip_tags( $new_instance['title'] );
 		$new_instance['more_text'] = strip_tags( $new_instance['more_text'] );
@@ -356,7 +356,7 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 	 *
 	 * @param array $instance Current settings
 	 */
-	function form( $instance ) {
+	public function form( $instance ) {
 
 		//* Merge with defaults
 		$instance = wp_parse_args( (array) $instance, $this->defaults );
@@ -374,9 +374,9 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 				<select id="<?php echo esc_attr( $this->get_field_id( 'post_type' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'post_type' ) ); ?>" onchange="tax_term_postback('<?php echo esc_attr( $this->get_field_id( 'tax_term' ) ); ?>', this.value);" >
 
 					<?php
-					echo '<option value="any" '. selected( 'any', $instance['post_type'], false ) .'>'. __( 'any', 'featured-custom-post-type-widget-for-genesis' ) .'</option>';
+					printf( '<option value="any" %s>%s</option>', selected( 'any', $instance['post_type'], false ), __( 'any', 'featured-custom-post-type-widget-for-genesis' ) );
 					foreach ( $item->post_type_list as $post_type_item ) {
-						echo '<option value="'. esc_attr( $post_type_item ) .'"'. selected( esc_attr( $post_type_item ), $instance['post_type'], false ) .'>'. esc_attr( $post_type_item ) .'</option>';
+						printf( '<option value="%s"%s>%s</option>', esc_attr( $post_type_item[1] ), selected( esc_attr( $post_type_item[1] ), $instance['post_type'], false ), esc_attr( $post_type_item[0] ) );
 					}
 
 					?>
@@ -630,24 +630,28 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 	 * @param  [type] $instance [description]
 	 * @return $item           list of post_types and list of taxonomies
 	 */
-	function build_lists( $instance ) {
+	protected function build_lists( $instance ) {
 
-		//* Merge with defaults
+		// Merge with defaults
 		$instance = wp_parse_args( (array) $instance, $this->defaults );
 
 		$item = new stdClass();
 
-		//* Fetch a list of possible post types
+		// Fetch a list of possible post types
 		$args = array(
 			'public'   => true,
 			'_builtin' => false,
 		);
-		$output = 'names';
-		$item->post_type_list = get_post_types( $args, $output );
+		$output     = 'objects';
+		$post_types = get_post_types( $args, $output );
 
-		//* Add posts to that post_type_list
-		$item->post_type_list['post'] = 'post';
-		$item->post_type_list['page'] = 'page';
+		foreach ( $post_types as $post_type ) {
+			$item->post_type_list[ $post_type->name ] = array( $post_type->label, $post_type->name );
+		}
+
+		// Add posts to that post_type_list
+		$item->post_type_list['post'] = array( 'Posts', 'post' );
+		$item->post_type_list['page'] = array( 'Pages', 'page' );
 
 		// And a list of available taxonomies for the current post type
 		$taxonomies = get_object_taxonomies( $instance['post_type'] );
@@ -697,11 +701,11 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 	 * alphabetically. Required because the display is a compound of term
 	 * *and* taxonomy.
 	 */
-	function tax_term_compare( $a, $b ) {
+	protected function tax_term_compare( $a, $b ) {
 		if ( $a->taxonomy == $b->taxonomy ) {
 			return ( $a->slug < $b->slug ) ? -1 : 1;
 		}
-		return ( $a->taxonomy <  $b->taxonomy )? -1 : 1;
+		return ( $a->taxonomy < $b->taxonomy )? -1 : 1;
 	}
 
 	/**
@@ -721,29 +725,28 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 	 * selected post type is provided in $_POST['post_type'], and the
 	 * calling script expects a JSON array of term objects.
 	 */
-	function tax_term_action_callback() {
+	public function tax_term_action_callback() {
 
 		$item = $this->build_ajax_list();
 
-		//* Build an appropriate JSON response containing this info
+		// Build an appropriate JSON response containing this info
 		$taxes['any'] = 'any';
 		foreach ( $item->tax_term_list as $tax_term_item ) {
-			$taxes[$tax_term_item->taxonomy . '/' . $tax_term_item->slug] =
+			$taxes[ $tax_term_item->taxonomy . '/' . $tax_term_item->slug ] =
 				$tax_term_item->taxonomy . '/' . $tax_term_item->name;
 		}
 
-		//* And emit it
+		// And emit it
+		$emit = json_encode( $taxes );
 		if ( function_exists( 'wp_json_encode' ) ) {
-			echo wp_json_encode( $taxes );
+			$emit = wp_json_encode( $taxes );
 		}
-		else {
-			echo json_encode( $taxes );
-		}
+		echo $emit;
 		die();
 
 	}
 
-	function add_column_classes( $classes, $columns ) {
+	public function add_column_classes( $classes, $columns ) {
 		global $wp_query;
 
 		//* Bail if we don't have a column number or the one we do have is invalid.
@@ -757,12 +760,12 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 			2 => 'one-half',
 			3 => 'one-third',
 			4 => 'one-fourth',
-			6 => 'one-sixth'
+			6 => 'one-sixth',
 		);
 
 		//* Add the appropriate column class.
 		$classes[] = 'grid';
-		$classes[] = $column_classes[absint($columns)];
+		$classes[] = $column_classes[ absint( $columns ) ];
 
 		//* Add an "odd" class to allow for more control of grid clollapse.
 		if ( ( $wp_query->current_post + 1 ) % 2 ) {
@@ -785,7 +788,7 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 	 * @return     $classes array The current post classes with the grid appended
 	 * @author     Rob Neu
 	 */
-	function add_post_class_one_half( $classes ) {
+	public function add_post_class_one_half( $classes ) {
 		return array_merge( (array) $this->add_column_classes( $classes, 2 ), $classes );
 	}
 
@@ -798,7 +801,7 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 	 * @return     $classes array The current post classes with the grid appended
 	 * @author     Rob Neu
 	 */
-	function add_post_class_one_third( $classes ) {
+	public function add_post_class_one_third( $classes ) {
 		return array_merge( (array) $this->add_column_classes( $classes, 3 ), $classes );
 	}
 
@@ -811,7 +814,7 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 	 * @return     $classes array The current post classes with the grid appended
 	 * @author     Rob Neu
 	 */
-	function add_post_class_one_fourth( $classes ) {
+	public function add_post_class_one_fourth( $classes ) {
 		return array_merge( (array) $this->add_column_classes( $classes, 4 ), $classes );
 	}
 
@@ -824,7 +827,7 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 	 * @return     $classes array The current post classes with the grid appended
 	 * @author     Rob Neu
 	 */
-	function add_post_class_one_sixth( $classes ) {
+	public function add_post_class_one_sixth( $classes ) {
 		return array_merge( (array) $this->add_column_classes( $classes, 6 ), $classes );
 	}
 
