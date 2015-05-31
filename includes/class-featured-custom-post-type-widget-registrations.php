@@ -653,10 +653,7 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 		$item->post_type_list['page'] = array( 'Pages', 'page' );
 
 		// And a list of available taxonomies for the current post type
-		$taxonomies = get_object_taxonomies( $instance['post_type'] );
-		if ( 'any' === $instance['post_type'] ) {
-			$taxonomies = get_taxonomies();
-		}
+		$taxonomies = 'any' === $instance['post_type'] ? get_taxonomies() : get_object_taxonomies( $instance['post_type'] );
 
 		// And from there, a list of available terms in that tax
 		$item->tax_term_list = $this->compile_taxonomies( $taxonomies );
@@ -672,10 +669,7 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 
 		$item = new stdClass;
 		// Fetch a list of available taxonomies for the current post type
-		$taxonomies = get_object_taxonomies( $_POST['post_type'] );
-		if ( 'any' === $_POST['post_type'] ) {
-			$taxonomies = get_taxonomies();
-		}
+		$taxonomies = 'any' === $_POST['post_type'] ? get_taxonomies() : get_object_taxonomies( $_POST['post_type'] );
 
 		// And from there, a list of available terms in that tax
 		$item->tax_term_list = $this->compile_taxonomies( $taxonomies );
