@@ -81,7 +81,6 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 
 		// Register our Ajax handler
 		add_action( 'wp_ajax_tax_term_action', array( $this, 'tax_term_action_callback' ) );
-		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue' ) );
 
 	}
 
@@ -706,18 +705,6 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 			return ( $a->slug < $b->slug ) ? -1 : 1;
 		}
 		return ( $a->taxonomy < $b->taxonomy )? -1 : 1;
-	}
-
-	/**
-	 * Enqueues the small bit of Javascript which will handle the Ajax
-	 * callback to correctly populate the custom term dropdown.
-	 */
-	public function admin_enqueue() {
-		$screen = get_current_screen()->id;
-		if ( in_array( $screen, array( 'widgets', 'customize' ) ) ) {
-			wp_enqueue_script( 'tax-term-ajax-script', plugins_url( '/js/ajax_handler.js', __FILE__ ), array( 'jquery' ) );
-			wp_localize_script( 'tax-term-ajax-script', 'ajax_object', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
-		}
 	}
 
 	/**

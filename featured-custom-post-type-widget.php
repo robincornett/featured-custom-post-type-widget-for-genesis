@@ -30,6 +30,8 @@ function gfcptw_init() {
 		add_action( 'admin_notices', 'gfcptw_notice' );
 		return;
 	}
+	add_action( 'plugins_loaded', 'gfcptw_load_textdomain' );
+	add_action( 'admin_enqueue_scripts', 'gfcptw_admin_enqueue' );
 
 }
 
@@ -38,9 +40,8 @@ function gfcptw_deactivate() {
 }
 
 function gfcptw_notice() {
-	echo '<div class="error"><p>';
-	echo __( '<strong>Featured Custom Post Type Widget For Genesis</strong> works only with the Genesis Framework. It has been <strong>deactivated</strong>.', 'featured-custom-post-type-widget-for-genesis' );
-	echo '</p></div>';
+	$message = __( '<strong>Featured Custom Post Type Widget For Genesis</strong> works only with the Genesis Framework. It has been <strong>deactivated</strong>.', 'featured-custom-post-type-widget-for-genesis' );
+	printf( '<div class="error"><p>%s</p></div>', esc_attr( $message ) );
 }
 
 // Register the widget
@@ -49,7 +50,6 @@ function gfcptw_register_widget() {
 	register_widget( 'Genesis_Featured_Custom_Post_Type' );
 }
 
-add_action( 'plugins_loaded', 'gfcptw_load_textdomain' );
 /**
  * Set up text domain for translations
  *
@@ -57,6 +57,18 @@ add_action( 'plugins_loaded', 'gfcptw_load_textdomain' );
  */
 function gfcptw_load_textdomain() {
 	load_plugin_textdomain( 'featured-custom-post-type-widget-for-genesis', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+}
+
+/**
+ * Enqueues the small bit of Javascript which will handle the Ajax
+ * callback to correctly populate the custom term dropdown.
+ */
+function gfcptw_admin_enqueue() {
+	$screen = get_current_screen()->id;
+	if ( in_array( $screen, array( 'widgets', 'customize' ) ) ) {
+		wp_enqueue_script( 'tax-term-ajax-script', plugins_url( 'includes/js/ajax_handler.js', __FILE__ ), array( 'jquery' ) );
+		wp_localize_script( 'tax-term-ajax-script', 'ajax_object', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
+	}
 }
 
 require plugin_dir_path( __FILE__ ) . 'includes/class-featured-custom-post-type-widget-registrations.php';
