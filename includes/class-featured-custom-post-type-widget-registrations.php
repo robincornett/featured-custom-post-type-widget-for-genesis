@@ -240,7 +240,7 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 		}
 
 		// Restore original query
-		wp_reset_postdata();
+        wp_reset_query();
 
 		//* The EXTRA Posts (list)
 		if ( ! empty( $instance['extra_num'] ) ) {
@@ -287,8 +287,8 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 				}
 			}
 
-			//* Restore original query
-			wp_reset_postdata();
+			// Restore original query
+			wp_reset_query();
 		}
 
 		if ( ! empty( $instance['more_from_category'] ) && ! empty( $instance['more_from_category_text'] ) && 'any' !== $instance['tax_term'] ) {
