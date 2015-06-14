@@ -15,12 +15,12 @@ class Featured_Custom_Post_Type_Widget_Genesis {
 
 	function deactivate() {
 		$dirname = version_compare( PHP_VERSION, '5.3', '>=' ) ? __DIR__ : dirname( __FILE__ );
-		deactivate_plugins( plugin_basename( dirname( $dirname ) ) . '/featured-custom-post-type-widget-genesis.php' );
+		deactivate_plugins( plugin_basename( dirname( $dirname ) ) . '/featured-custom-post-type-widget.php' );
 	}
 
 	function error_notice() {
 		$message = __( '<strong>Featured Custom Post Type Widget For Genesis</strong> works only with the Genesis Framework. It has been <strong>deactivated</strong>.', 'featured-custom-post-type-widget-for-genesis' );
-		printf( '<div class="error"><p>%s</p></div>', esc_attr( $message ) );
+		printf( '<div class="error"><p>%s</p></div>', wp_kses_post( $message ) );
 	}
 
 	function register() {
