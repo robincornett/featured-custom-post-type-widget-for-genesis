@@ -24,14 +24,7 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 function featured_custom_post_type_widget_genesis_require() {
-	$files = array(
-		'class-featuredcustomposttypewidgetgenesis',
-		'class-featuredcustomposttypewidgetgenesis-widget',
-	);
-
-	foreach ( $files as $file ) {
-		require plugin_dir_path( __FILE__ ) . 'includes/' . $file . '.php';
-	}
+	require plugin_dir_path( __FILE__ ) . 'includes/class-featuredcustomposttypewidgetgenesis.php';
 }
 featured_custom_post_type_widget_genesis_require();
 

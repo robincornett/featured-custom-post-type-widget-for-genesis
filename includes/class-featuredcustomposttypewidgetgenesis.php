@@ -11,6 +11,9 @@ class Featured_Custom_Post_Type_Widget_Genesis {
 		add_action( 'widgets_init', array( $this, 'register' ) );
 		add_action( 'plugins_loaded', array( $this, 'load_textdomain' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ) );
+
+		require_once plugin_dir_path( __FILE__ ) . 'class-featuredcustomposttypewidgetgenesis-widget.php';
+
 	}
 
 	function deactivate() {
