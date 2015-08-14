@@ -124,11 +124,11 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 			}
 			if ( 'include' === $instance['include_exclude'] ) {
 				$query_args['post__in'] = $ids;
-			}
-			elseif ( 'exclude' === $instance['include_exclude'] ) {
+			} elseif ( 'exclude' === $instance['include_exclude'] ) {
 				$query_args['post__not_in'] = $ids;
 			}
 		}
+		$query_args = apply_filters( 'featuredcustomposttypewidgetgenesis_query_args', $query_args, $instance );
 
 		// Extract the custom tax term, if provided
 		if ( 'any' !== $instance['tax_term'] ) {
