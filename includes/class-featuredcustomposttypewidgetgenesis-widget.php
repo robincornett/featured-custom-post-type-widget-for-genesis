@@ -37,6 +37,7 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 			'title'                   => '',
 			'post_type'               => 'post',
 			'tax_term'                => '',
+			'include_exclude_term'    => 'include',
 			'include_exclude'         => '',
 			'post_ID'                 => '',
 			'posts_num'               => 1,
@@ -128,7 +129,6 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 				$query_args['post__not_in'] = $ids;
 			}
 		}
-		$query_args = apply_filters( 'featuredcustomposttypewidgetgenesis_query_args', $query_args, $instance );
 
 		// Extract the custom tax term, if provided
 		if ( 'any' !== $instance['tax_term'] ) {
@@ -138,6 +138,7 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 					'taxonomy' => $post_tax,
 					'field'    => 'slug',
 					'terms'    => $post_term,
+					'operator' => 'exclude' === $instance['include_exclude_term'] ? 'NOT IN' : 'IN',
 				),
 			);
 		}
@@ -146,6 +147,8 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 		if ( $instance['exclude_displayed'] ) {
 			$query_args['post__not_in'] = (array) $_genesis_displayed_ids;
 		}
+
+		$query_args = apply_filters( 'featuredcustomposttypewidgetgenesis_query_args', $query_args, $instance );
 
 		if ( 'full' !== $instance['columns'] ) {
 			add_filter( 'post_class', array( $this, 'add_post_class_' . $instance['columns'] ) );
@@ -396,6 +399,15 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 
 					?>
 				</select>
+			</p>
+
+			<p>
+				<label for="<?php echo esc_attr( $this->get_field_id( 'include_exclude_term' ) ); ?>"><?php _e( 'Include/Exclude Specific Term:', 'featured-custom-post-type-widget-for-genesis' ); ?> </label>
+					<select id="<?php echo esc_attr( $this->get_field_id( 'include_exclude_term' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'include_exclude_term' ) ); ?>">
+						<!-- <option value="" <?php selected( '', $instance['include_exclude_term'] ); ?>> -- </option> -->
+						<option value="include" <?php selected( 'include', $instance['include_exclude_term'] ); ?>><?php _e( 'Include', 'featured-custom-post-type-widget-for-genesis' ); ?></option>
+						<option value="exclude" <?php selected( 'exclude', $instance['include_exclude_term'] ); ?>><?php _e( 'Exclude', 'featured-custom-post-type-widget-for-genesis' ); ?></option>
+					</select>
 			</p>
 
 		</div>
