@@ -143,9 +143,12 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 			);
 		}
 
-		//* Exclude displayed IDs from this loop?
+		// Exclude displayed IDs from this loop?
 		if ( $instance['exclude_displayed'] ) {
-			$query_args['post__not_in'] = (array) $_genesis_displayed_ids;
+			$previously_excluded        = isset( $query_args['post__not_in'] ) ? (array) $query_args['post__not_in'] : array();
+			$_genesis_displayed_ids[]   = is_singular() ? get_the_ID() : '';
+			$excluded_ids               = array_merge( $previously_excluded, (array) $_genesis_displayed_ids );
+			$query_args['post__not_in'] = $excluded_ids;
 		}
 
 		$query_args = apply_filters( 'featuredcustomposttypewidgetgenesis_query_args', $query_args, $instance );
