@@ -178,7 +178,8 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 			) ), $size );
 
 			if ( $instance['show_image'] && $image ) {
-				printf( '<a href="%s" title="%s" class="%s">%s</a>', get_permalink(), the_title_attribute( 'echo=0' ), esc_attr( $instance['image_alignment'] ), $image );
+				$role = empty( $instance['show_title'] ) ? '' : 'aria-hidden="true"';
+				printf( '<a href="%s" class="%s" %s>%s</a>', get_permalink(), esc_attr( $instance['image_alignment'] ), $role, $image );
 			}
 
 			if ( ! empty( $instance['show_gravatar'] ) ) {
@@ -191,11 +192,14 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 				echo genesis_html5() ? '<header class="entry-header">' : '';
 
 				if ( ! empty( $instance['show_title'] ) ) {
-					$title = sprintf( '<h2><a href="%s" title="%s">%s</a></h2>', get_permalink(), the_title_attribute( 'echo=0' ), get_the_title() );
+					$title   = get_the_title() ? get_the_title() : __( '(no title)', 'featured-custom-post-type-widget-for-genesis' );
+					$title   = apply_filters( 'genesis_featured_post_title', $title, $instance, $args );
+					$heading = current_theme_supports( 'genesis-accessibility', array( 'headings' ) ) ? 'h4' : 'h2';
 					if ( genesis_html5() ) {
-						 $title = sprintf( '<h2 class="entry-title"><a href="%s" title="%s">%s</a></h2>', get_permalink(), the_title_attribute( 'echo=0' ), get_the_title() );
+						printf( '<%s class="entry-title"><a href="%s">%s</a></%s>', $heading, get_permalink(), $title, $heading );
+					} else {
+						printf( '<%s><a href="%s">%s</a></%s>', $heading, get_permalink(), $title, $heading );
 					}
-					echo $title;
 				}
 			}
 
@@ -215,7 +219,11 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 					the_excerpt();
 				}
 				elseif ( 'content-limit' == $instance['show_content'] ) {
-					the_content_limit( (int) $instance['content_limit'], esc_html( $instance['more_text'] ) );
+					if ( current_theme_supports( 'genesis-accessibility', array( 'headings' ) ) ) {
+						the_content_limit( (int) $instance['content_limit'], genesis_a11y_more_link( esc_html( $instance['more_text'] ) ) );
+					} else {
+						the_content_limit( (int) $instance['content_limit'], esc_html( $instance['more_text'] ) );
+					}
 				}
 				else {
 
@@ -224,7 +232,11 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 					$orig_more = $more;
 					$more = 0;
 
-					the_content( esc_html( $instance['more_text'] ) );
+					if ( current_theme_supports( 'genesis-accessibility', array( 'headings' ) ) ) {
+						the_content( genesis_a11y_more_link( esc_html( $instance['more_text'] ) ) );
+					} else {
+						the_content( esc_html( $instance['more_text'] ) );
+					}
 
 					$more = $orig_more;
 
