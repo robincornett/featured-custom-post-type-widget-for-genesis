@@ -461,6 +461,7 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 						<option value="ID" <?php selected( 'ID', $instance['orderby'] ); ?>><?php _e( 'ID', 'featured-custom-post-type-widget-for-genesis' ); ?></option>
 						<option value="comment_count" <?php selected( 'comment_count', $instance['orderby'] ); ?>><?php _e( 'Comment Count', 'featured-custom-post-type-widget-for-genesis' ); ?></option>
 						<option value="rand" <?php selected( 'rand', $instance['orderby'] ); ?>><?php _e( 'Random', 'featured-custom-post-type-widget-for-genesis' ); ?></option>
+						<option value="menu_order" <?php selected( 'menu_order', $instance['orderby'] ); ?>><?php _e( 'Menu Order', 'featured-custom-post-type-widget-for-genesis' ); ?></option>
 					</select>
 				</p>
 
