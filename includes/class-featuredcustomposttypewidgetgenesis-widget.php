@@ -109,6 +109,9 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 			printf( $before_title . apply_filters( 'widget_title', $instance['title'], $instance, $this->id_base ) . $after_title );
 		}
 
+		do_action( 'featuredcustomposttypewidgetgenesis_after_title' );
+		do_action( "featuredcustomposttypewidgetgenesis_after_title_{$args['widget_id']}" );
+
 		$query_args = array(
 			'post_type'           => $instance['post_type'],
 			'showposts'           => $instance['posts_num'],
