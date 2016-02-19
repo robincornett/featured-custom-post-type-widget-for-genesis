@@ -215,10 +215,10 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 
 				echo genesis_html5() ? '<div class="entry-content">' : '';
 
-				if ( 'excerpt' == $instance['show_content'] ) {
+				if ( 'excerpt' === $instance['show_content'] ) {
 					the_excerpt();
 				}
-				elseif ( 'content-limit' == $instance['show_content'] ) {
+				elseif ( 'content-limit' === $instance['show_content'] ) {
 					if ( current_theme_supports( 'genesis-accessibility', array( 'headings' ) ) ) {
 						the_content_limit( (int) $instance['content_limit'], genesis_a11y_more_link( esc_html( $instance['more_text'] ) ) );
 					} else {
@@ -275,7 +275,7 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 			);
 
 			// Extract the custom tax term, if provided
-			if ( 'any' != $instance['tax_term'] ) {
+			if ( 'any' !== $instance['tax_term'] ) {
 				list( $post_tax, $post_term ) = explode( '/', $instance['tax_term'], 2 );
 				$query_args['tax_query'] = array(
 					array(
@@ -381,13 +381,13 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 
 		?>
 		<p>
-			<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php _e( 'Title:', 'featured-custom-post-type-widget-for-genesis' ); ?> </label>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php esc_attr_e( 'Title:', 'featured-custom-post-type-widget-for-genesis' ); ?> </label>
 			<input type="text" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" value="<?php echo esc_attr( $instance['title'] ); ?>" class="widefat" />
 		</p>
 
 		<div class="genesis-widget-column-box genesis-widget-column-box-top">
 			<p>
-				<label for="<?php echo esc_attr( $this->get_field_id( 'post_type' ) ); ?>"><?php _e( 'Post Type:', 'featured-custom-post-type-widget-for-genesis' ); ?> </label>
+				<label for="<?php echo esc_attr( $this->get_field_id( 'post_type' ) ); ?>"><?php esc_attr_e( 'Post Type:', 'featured-custom-post-type-widget-for-genesis' ); ?> </label>
 				<select id="<?php echo esc_attr( $this->get_field_id( 'post_type' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'post_type' ) ); ?>" onchange="tax_term_postback('<?php echo esc_attr( $this->get_field_id( 'tax_term' ) ); ?>', this.value);" >
 
 					<?php
@@ -401,7 +401,7 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 			</p>
 
 			<p>
-				<label for="<?php echo esc_attr( $this->get_field_id( 'tax_term' ) ); ?>"><?php _e( 'Category/Term:', 'featured-custom-post-type-widget-for-genesis' ); ?> </label>
+				<label for="<?php echo esc_attr( $this->get_field_id( 'tax_term' ) ); ?>"><?php esc_attr_e( 'Category/Term:', 'featured-custom-post-type-widget-for-genesis' ); ?> </label>
 				<select id="<?php echo esc_attr( $this->get_field_id( 'tax_term' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'tax_term' ) ); ?>">
 
 					<?php
@@ -417,11 +417,10 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 			</p>
 
 			<p>
-				<label for="<?php echo esc_attr( $this->get_field_id( 'include_exclude_term' ) ); ?>"><?php _e( 'Include/Exclude Specific Term:', 'featured-custom-post-type-widget-for-genesis' ); ?> </label>
+				<label for="<?php echo esc_attr( $this->get_field_id( 'include_exclude_term' ) ); ?>"><?php esc_attr_e( 'Include/Exclude Specific Term:', 'featured-custom-post-type-widget-for-genesis' ); ?> </label>
 					<select id="<?php echo esc_attr( $this->get_field_id( 'include_exclude_term' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'include_exclude_term' ) ); ?>">
-						<!-- <option value="" <?php selected( '', $instance['include_exclude_term'] ); ?>> -- </option> -->
-						<option value="include" <?php selected( 'include', $instance['include_exclude_term'] ); ?>><?php _e( 'Include', 'featured-custom-post-type-widget-for-genesis' ); ?></option>
-						<option value="exclude" <?php selected( 'exclude', $instance['include_exclude_term'] ); ?>><?php _e( 'Exclude', 'featured-custom-post-type-widget-for-genesis' ); ?></option>
+						<option value="include" <?php selected( 'include', $instance['include_exclude_term'] ); ?>><?php esc_attr_e( 'Include', 'featured-custom-post-type-widget-for-genesis' ); ?></option>
+						<option value="exclude" <?php selected( 'exclude', $instance['include_exclude_term'] ); ?>><?php esc_attr_e( 'Exclude', 'featured-custom-post-type-widget-for-genesis' ); ?></option>
 					</select>
 			</p>
 
@@ -432,12 +431,12 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 			<div class="genesis-widget-column-box">
 
 				<p>
-					<label for="<?php echo esc_attr( $this->get_field_id( 'posts_num' ) ); ?>"><?php _e( 'Number of Posts to Show:', 'featured-custom-post-type-widget-for-genesis' ); ?> </label>
+					<label for="<?php echo esc_attr( $this->get_field_id( 'posts_num' ) ); ?>"><?php esc_attr_e( 'Number of Posts to Show:', 'featured-custom-post-type-widget-for-genesis' ); ?> </label>
 					<input type="number" min="1" max="20" id="<?php echo esc_attr( $this->get_field_id( 'posts_num' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'posts_num' ) ); ?>" value="<?php echo esc_attr( $instance['posts_num'] ); ?>" />
 				</p>
 
 				<p>
-					<label for="<?php echo esc_attr( $this->get_field_id( 'columns' ) ); ?>"><?php _e( 'Number of Columns:', 'featured-custom-post-type-widget-for-genesis' ); ?> </label>
+					<label for="<?php echo esc_attr( $this->get_field_id( 'columns' ) ); ?>"><?php esc_attr_e( 'Number of Columns:', 'featured-custom-post-type-widget-for-genesis' ); ?> </label>
 					<select id="<?php echo esc_attr( $this->get_field_id( 'columns' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'columns' ) ); ?>">
 						<option value="full" <?php selected( 'full', $instance['columns'] ); ?>>1</option>
 						<option value="one_half" <?php selected( 'one_half', $instance['columns'] ); ?>>2</option>
@@ -448,28 +447,28 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 				</p>
 
 				<p>
-					<label for="<?php echo esc_attr( $this->get_field_id( 'posts_offset' ) ); ?>"><?php _e( 'Number of Posts to Offset:', 'featured-custom-post-type-widget-for-genesis' ); ?> </label>
+					<label for="<?php echo esc_attr( $this->get_field_id( 'posts_offset' ) ); ?>"><?php esc_attr_e( 'Number of Posts to Offset:', 'featured-custom-post-type-widget-for-genesis' ); ?> </label>
 					<input type="number" min="0" max="99" id="<?php echo esc_attr( $this->get_field_id( 'posts_offset' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'posts_offset' ) ); ?>" value="<?php echo esc_attr( $instance['posts_offset'] ); ?>" />
 				</p>
 
 				<p>
-					<label for="<?php echo esc_attr( $this->get_field_id( 'orderby' ) ); ?>"><?php _e( 'Order By:', 'featured-custom-post-type-widget-for-genesis' ); ?> </label>
+					<label for="<?php echo esc_attr( $this->get_field_id( 'orderby' ) ); ?>"><?php esc_attr_e( 'Order By:', 'featured-custom-post-type-widget-for-genesis' ); ?> </label>
 					<select id="<?php echo esc_attr( $this->get_field_id( 'orderby' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'orderby' ) ); ?>">
-						<option value="date" <?php selected( 'date', $instance['orderby'] ); ?>><?php _e( 'Date', 'featured-custom-post-type-widget-for-genesis' ); ?></option>
-						<option value="title" <?php selected( 'title', $instance['orderby'] ); ?>><?php _e( 'Title', 'featured-custom-post-type-widget-for-genesis' ); ?></option>
-						<option value="parent" <?php selected( 'parent', $instance['orderby'] ); ?>><?php _e( 'Parent', 'featured-custom-post-type-widget-for-genesis' ); ?></option>
-						<option value="ID" <?php selected( 'ID', $instance['orderby'] ); ?>><?php _e( 'ID', 'featured-custom-post-type-widget-for-genesis' ); ?></option>
-						<option value="comment_count" <?php selected( 'comment_count', $instance['orderby'] ); ?>><?php _e( 'Comment Count', 'featured-custom-post-type-widget-for-genesis' ); ?></option>
-						<option value="rand" <?php selected( 'rand', $instance['orderby'] ); ?>><?php _e( 'Random', 'featured-custom-post-type-widget-for-genesis' ); ?></option>
-						<option value="menu_order" <?php selected( 'menu_order', $instance['orderby'] ); ?>><?php _e( 'Menu Order', 'featured-custom-post-type-widget-for-genesis' ); ?></option>
+						<option value="date" <?php selected( 'date', $instance['orderby'] ); ?>><?php esc_attr_e( 'Date', 'featured-custom-post-type-widget-for-genesis' ); ?></option>
+						<option value="title" <?php selected( 'title', $instance['orderby'] ); ?>><?php esc_attr_e( 'Title', 'featured-custom-post-type-widget-for-genesis' ); ?></option>
+						<option value="parent" <?php selected( 'parent', $instance['orderby'] ); ?>><?php esc_attr_e( 'Parent', 'featured-custom-post-type-widget-for-genesis' ); ?></option>
+						<option value="ID" <?php selected( 'ID', $instance['orderby'] ); ?>><?php esc_attr_e( 'ID', 'featured-custom-post-type-widget-for-genesis' ); ?></option>
+						<option value="comment_count" <?php selected( 'comment_count', $instance['orderby'] ); ?>><?php esc_attr_e( 'Comment Count', 'featured-custom-post-type-widget-for-genesis' ); ?></option>
+						<option value="rand" <?php selected( 'rand', $instance['orderby'] ); ?>><?php esc_attr_e( 'Random', 'featured-custom-post-type-widget-for-genesis' ); ?></option>
+						<option value="menu_order" <?php selected( 'menu_order', $instance['orderby'] ); ?>><?php esc_attr_e( 'Menu Order', 'featured-custom-post-type-widget-for-genesis' ); ?></option>
 					</select>
 				</p>
 
 				<p>
-					<label for="<?php echo esc_attr( $this->get_field_id( 'order' ) ); ?>"><?php _e( 'Sort Order:', 'featured-custom-post-type-widget-for-genesis' ); ?> </label>
+					<label for="<?php echo esc_attr( $this->get_field_id( 'order' ) ); ?>"><?php esc_attr_e( 'Sort Order:', 'featured-custom-post-type-widget-for-genesis' ); ?> </label>
 					<select id="<?php echo esc_attr( $this->get_field_id( 'order' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'order' ) ); ?>">
-						<option value="DESC" <?php selected( 'DESC', $instance['order'] ); ?>><?php _e( 'Descending (3, 2, 1)', 'featured-custom-post-type-widget-for-genesis' ); ?></option>
-						<option value="ASC" <?php selected( 'ASC', $instance['order'] ); ?>><?php _e( 'Ascending (1, 2, 3)', 'featured-custom-post-type-widget-for-genesis' ); ?></option>
+						<option value="DESC" <?php selected( 'DESC', $instance['order'] ); ?>><?php esc_attr_e( 'Descending (3, 2, 1)', 'featured-custom-post-type-widget-for-genesis' ); ?></option>
+						<option value="ASC" <?php selected( 'ASC', $instance['order'] ); ?>><?php esc_attr_e( 'Ascending (1, 2, 3)', 'featured-custom-post-type-widget-for-genesis' ); ?></option>
 					</select>
 				</p>
 
@@ -478,27 +477,27 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 			<div class="genesis-widget-column-box">
 
 				<p>
-					<label for="<?php echo esc_attr( $this->get_field_id( 'include_exclude' ) ); ?>"><?php _e( 'Include/Exclude Specific Posts:', 'featured-custom-post-type-widget-for-genesis' ); ?> </label>
+					<label for="<?php echo esc_attr( $this->get_field_id( 'include_exclude' ) ); ?>"><?php esc_attr_e( 'Include/Exclude Specific Posts:', 'featured-custom-post-type-widget-for-genesis' ); ?> </label>
 					<select id="<?php echo esc_attr( $this->get_field_id( 'include_exclude' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'include_exclude' ) ); ?>">
 						<option value="" <?php selected( '', $instance['include_exclude'] ); ?>> -- </option>
-						<option value="include" <?php selected( 'include', $instance['include_exclude'] ); ?>><?php _e( 'Include', 'featured-custom-post-type-widget-for-genesis' ); ?></option>
-						<option value="exclude" <?php selected( 'exclude', $instance['include_exclude'] ); ?>><?php _e( 'Exclude', 'featured-custom-post-type-widget-for-genesis' ); ?></option>
+						<option value="include" <?php selected( 'include', $instance['include_exclude'] ); ?>><?php esc_attr_e( 'Include', 'featured-custom-post-type-widget-for-genesis' ); ?></option>
+						<option value="exclude" <?php selected( 'exclude', $instance['include_exclude'] ); ?>><?php esc_attr_e( 'Exclude', 'featured-custom-post-type-widget-for-genesis' ); ?></option>
 					</select>
 				</p>
 
 				<p>
-					<label for "<?php echo esc_attr( $this->get_field_id( 'post_ID' ) ); ?>"><?php _e( 'Post/Page IDs to Include/Exclude:', 'featured-custom-post-type-widget-for-genesis' ); ?> </label>
+					<label for "<?php echo esc_attr( $this->get_field_id( 'post_ID' ) ); ?>"><?php esc_attr_e( 'Post/Page IDs to Include/Exclude:', 'featured-custom-post-type-widget-for-genesis' ); ?> </label>
 					<input type="text" id="<?php echo esc_attr( $this->get_field_id( 'post_ID' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'post_ID' ) ); ?>" value="<?php echo esc_attr( $instance['post_ID'] ); ?>" />
 				</p>
 
 				<p>
 					<input id="<?php echo esc_attr( $this->get_field_id( 'exclude_displayed' ) ); ?>" type="checkbox" name="<?php echo esc_attr( $this->get_field_name( 'exclude_displayed' ) ); ?>" value="1" <?php checked( $instance['exclude_displayed'] ); ?>/>
-					<label for="<?php echo esc_attr( $this->get_field_id( 'exclude_displayed' ) ); ?>"><?php _e( 'Exclude Previously Displayed Posts?', 'featured-custom-post-type-widget-for-genesis' ); ?></label>
+					<label for="<?php echo esc_attr( $this->get_field_id( 'exclude_displayed' ) ); ?>"><?php esc_attr_e( 'Exclude Previously Displayed Posts?', 'featured-custom-post-type-widget-for-genesis' ); ?></label>
 				</p>
 
 				<p>
 					<input id="<?php echo esc_attr( $this->get_field_id( 'exclude_sticky' ) ); ?>" type="checkbox" name="<?php echo esc_attr( $this->get_field_name( 'exclude_sticky' ) ); ?>" value="1" <?php checked( $instance['exclude_sticky'] ); ?>/>
-					<label for="<?php echo esc_attr( $this->get_field_id( 'exclude_sticky' ) ); ?>"><?php _e( 'Exclude Sticky Posts?', 'genesis' ); ?></label>
+					<label for="<?php echo esc_attr( $this->get_field_id( 'exclude_sticky' ) ); ?>"><?php esc_attr_e( 'Exclude Sticky Posts?', 'genesis' ); ?></label>
 				</p>
 
 			</div>
@@ -507,26 +506,26 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 
 				<p>
 					<input id="<?php echo esc_attr( $this->get_field_id( 'show_gravatar' ) ); ?>" type="checkbox" name="<?php echo esc_attr( $this->get_field_name( 'show_gravatar' ) ); ?>" value="1" <?php checked( $instance['show_gravatar'] ); ?>/>
-					<label for="<?php echo esc_attr( $this->get_field_id( 'show_gravatar' ) ); ?>"><?php _e( 'Show Author Gravatar', 'featured-custom-post-type-widget-for-genesis' ); ?></label>
+					<label for="<?php echo esc_attr( $this->get_field_id( 'show_gravatar' ) ); ?>"><?php esc_attr_e( 'Show Author Gravatar', 'featured-custom-post-type-widget-for-genesis' ); ?></label>
 				</p>
 
 				<p>
-					<label for="<?php echo esc_attr( $this->get_field_id( 'gravatar_size' ) ); ?>"><?php _e( 'Gravatar Size:', 'featured-custom-post-type-widget-for-genesis' ); ?> </label>
+					<label for="<?php echo esc_attr( $this->get_field_id( 'gravatar_size' ) ); ?>"><?php esc_attr_e( 'Gravatar Size:', 'featured-custom-post-type-widget-for-genesis' ); ?> </label>
 					<select id="<?php echo esc_attr( $this->get_field_id( 'gravatar_size' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'gravatar_size' ) ); ?>">
-						<option value="45" <?php selected( 45, $instance['gravatar_size'] ); ?>><?php _e( 'Small (45px)', 'featured-custom-post-type-widget-for-genesis' ); ?></option>
-						<option value="65" <?php selected( 65, $instance['gravatar_size'] ); ?>><?php _e( 'Medium (65px)', 'featured-custom-post-type-widget-for-genesis' ); ?></option>
-						<option value="85" <?php selected( 85, $instance['gravatar_size'] ); ?>><?php _e( 'Large (85px)', 'featured-custom-post-type-widget-for-genesis' ); ?></option>
-						<option value="125" <?php selected( 125, $instance['gravatar_size'] ); ?>><?php _e( 'Extra Large (125px)', 'featured-custom-post-type-widget-for-genesis' ); ?></option>
+						<option value="45" <?php selected( 45, $instance['gravatar_size'] ); ?>><?php esc_attr_e( 'Small (45px)', 'featured-custom-post-type-widget-for-genesis' ); ?></option>
+						<option value="65" <?php selected( 65, $instance['gravatar_size'] ); ?>><?php esc_attr_e( 'Medium (65px)', 'featured-custom-post-type-widget-for-genesis' ); ?></option>
+						<option value="85" <?php selected( 85, $instance['gravatar_size'] ); ?>><?php esc_attr_e( 'Large (85px)', 'featured-custom-post-type-widget-for-genesis' ); ?></option>
+						<option value="125" <?php selected( 125, $instance['gravatar_size'] ); ?>><?php esc_attr_e( 'Extra Large (125px)', 'featured-custom-post-type-widget-for-genesis' ); ?></option>
 					</select>
 				</p>
 
 				<p>
-					<label for="<?php echo esc_attr( $this->get_field_id( 'gravatar_alignment' ) ); ?>"><?php _e( 'Gravatar Alignment:', 'featured-custom-post-type-widget-for-genesis' ); ?> </label>
+					<label for="<?php echo esc_attr( $this->get_field_id( 'gravatar_alignment' ) ); ?>"><?php esc_attr_e( 'Gravatar Alignment:', 'featured-custom-post-type-widget-for-genesis' ); ?> </label>
 					<select id="<?php echo esc_attr( $this->get_field_id( 'gravatar_alignment' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'gravatar_alignment' ) ); ?>">
-						<option value="alignnone">- <?php _e( 'None', 'featured-custom-post-type-widget-for-genesis' ); ?> -</option>
-						<option value="alignleft" <?php selected( 'alignleft', $instance['gravatar_alignment'] ); ?>><?php _e( 'Left', 'featured-custom-post-type-widget-for-genesis' ); ?></option>
-						<option value="alignright" <?php selected( 'alignright', $instance['gravatar_alignment'] ); ?>><?php _e( 'Right', 'featured-custom-post-type-widget-for-genesis' ); ?></option>
-						<option value="aligncenter" <?php selected( 'aligncenter', $instance['gravatar_alignment'] ); ?>><?php _e( 'Center', 'featured-custom-post-type-widget-for-genesis' ); ?></option>
+						<option value="alignnone">- <?php esc_attr_e( 'None', 'featured-custom-post-type-widget-for-genesis' ); ?> -</option>
+						<option value="alignleft" <?php selected( 'alignleft', $instance['gravatar_alignment'] ); ?>><?php esc_attr_e( 'Left', 'featured-custom-post-type-widget-for-genesis' ); ?></option>
+						<option value="alignright" <?php selected( 'alignright', $instance['gravatar_alignment'] ); ?>><?php esc_attr_e( 'Right', 'featured-custom-post-type-widget-for-genesis' ); ?></option>
+						<option value="aligncenter" <?php selected( 'aligncenter', $instance['gravatar_alignment'] ); ?>><?php esc_attr_e( 'Center', 'featured-custom-post-type-widget-for-genesis' ); ?></option>
 					</select>
 				</p>
 
@@ -536,11 +535,11 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 
 				<p>
 					<input id="<?php echo esc_attr( $this->get_field_id( 'show_image' ) ); ?>" type="checkbox" name="<?php echo esc_attr( $this->get_field_name( 'show_image' ) ); ?>" value="1" <?php checked( $instance['show_image'] ); ?>/>
-					<label for="<?php echo esc_attr( $this->get_field_id( 'show_image' ) ); ?>"><?php _e( 'Show Featured Image', 'featured-custom-post-type-widget-for-genesis' ); ?></label>
+					<label for="<?php echo esc_attr( $this->get_field_id( 'show_image' ) ); ?>"><?php esc_attr_e( 'Show Featured Image', 'featured-custom-post-type-widget-for-genesis' ); ?></label>
 				</p>
 
 				<p>
-					<label for="<?php echo esc_attr( $this->get_field_id( 'image_size' ) ); ?>"><?php _e( 'Image Size:', 'featured-custom-post-type-widget-for-genesis' ); ?> </label>
+					<label for="<?php echo esc_attr( $this->get_field_id( 'image_size' ) ); ?>"><?php esc_attr_e( 'Image Size:', 'featured-custom-post-type-widget-for-genesis' ); ?> </label>
 					<select id="<?php echo esc_attr( $this->get_field_id( 'image_size' ) ); ?>" class="genesis-image-size-selector" name="<?php echo esc_attr( $this->get_field_name( 'image_size' ) ); ?>">
 						<?php
 						$sizes = genesis_get_image_sizes();
@@ -558,12 +557,12 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 				</p>
 
 				<p>
-					<label for="<?php echo esc_attr( $this->get_field_id( 'image_alignment' ) ); ?>"><?php _e( 'Image Alignment:', 'featured-custom-post-type-widget-for-genesis' ); ?> </label>
+					<label for="<?php echo esc_attr( $this->get_field_id( 'image_alignment' ) ); ?>"><?php esc_attr_e( 'Image Alignment:', 'featured-custom-post-type-widget-for-genesis' ); ?> </label>
 					<select id="<?php echo esc_attr( $this->get_field_id( 'image_alignment' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'image_alignment' ) ); ?>">
-						<option value="alignnone">- <?php _e( 'None', 'featured-custom-post-type-widget-for-genesis' ); ?> -</option>
-						<option value="alignleft" <?php selected( 'alignleft', $instance['image_alignment'] ); ?>><?php _e( 'Left', 'featured-custom-post-type-widget-for-genesis' ); ?></option>
-						<option value="alignright" <?php selected( 'alignright', $instance['image_alignment'] ); ?>><?php _e( 'Right', 'featured-custom-post-type-widget-for-genesis' ); ?></option>
-						<option value="aligncenter" <?php selected( 'aligncenter', $instance['image_alignment'] ); ?>><?php _e( 'Center', 'featured-custom-post-type-widget-for-genesis' ); ?></option>
+						<option value="alignnone">- <?php esc_attr_e( 'None', 'featured-custom-post-type-widget-for-genesis' ); ?> -</option>
+						<option value="alignleft" <?php selected( 'alignleft', $instance['image_alignment'] ); ?>><?php esc_attr_e( 'Left', 'featured-custom-post-type-widget-for-genesis' ); ?></option>
+						<option value="alignright" <?php selected( 'alignright', $instance['image_alignment'] ); ?>><?php esc_attr_e( 'Right', 'featured-custom-post-type-widget-for-genesis' ); ?></option>
+						<option value="aligncenter" <?php selected( 'aligncenter', $instance['image_alignment'] ); ?>><?php esc_attr_e( 'Center', 'featured-custom-post-type-widget-for-genesis' ); ?></option>
 					</select>
 				</p>
 
@@ -577,32 +576,32 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 
 				<p>
 					<input id="<?php echo esc_attr( $this->get_field_id( 'show_title' ) ); ?>" type="checkbox" name="<?php echo esc_attr( $this->get_field_name( 'show_title' ) ); ?>" value="1" <?php checked( $instance['show_title'] ); ?>/>
-					<label for="<?php echo esc_attr( $this->get_field_id( 'show_title' ) ); ?>"><?php _e( 'Show Post Title', 'featured-custom-post-type-widget-for-genesis' ); ?></label>
+					<label for="<?php echo esc_attr( $this->get_field_id( 'show_title' ) ); ?>"><?php esc_attr_e( 'Show Post Title', 'featured-custom-post-type-widget-for-genesis' ); ?></label>
 				</p>
 
 				<p>
 					<input id="<?php echo esc_attr( $this->get_field_id( 'show_byline' ) ); ?>" type="checkbox" name="<?php echo esc_attr( $this->get_field_name( 'show_byline' ) ); ?>" value="1" <?php checked( $instance['show_byline'] ); ?>/>
-					<label for="<?php echo esc_attr( $this->get_field_id( 'show_byline' ) ); ?>"><?php _e( 'Show Post Info', 'featured-custom-post-type-widget-for-genesis' ); ?></label>
+					<label for="<?php echo esc_attr( $this->get_field_id( 'show_byline' ) ); ?>"><?php esc_attr_e( 'Show Post Info', 'featured-custom-post-type-widget-for-genesis' ); ?></label>
 					<input type="text" id="<?php echo esc_attr( $this->get_field_id( 'post_info' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'post_info' ) ); ?>" value="<?php echo esc_attr( $instance['post_info'] ); ?>" class="widefat" />
 				</p>
 
 				<p>
-					<label for="<?php echo esc_attr( $this->get_field_id( 'show_content' ) ); ?>"><?php _e( 'Content Type:', 'featured-custom-post-type-widget-for-genesis' ); ?> </label>
+					<label for="<?php echo esc_attr( $this->get_field_id( 'show_content' ) ); ?>"><?php esc_attr_e( 'Content Type:', 'featured-custom-post-type-widget-for-genesis' ); ?> </label>
 					<select id="<?php echo esc_attr( $this->get_field_id( 'show_content' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'show_content' ) ); ?>">
-						<option value="content" <?php selected( 'content', $instance['show_content'] ); ?>><?php _e( 'Show Content', 'featured-custom-post-type-widget-for-genesis' ); ?></option>
-						<option value="excerpt" <?php selected( 'excerpt', $instance['show_content'] ); ?>><?php _e( 'Show Excerpt', 'featured-custom-post-type-widget-for-genesis' ); ?></option>
-						<option value="content-limit" <?php selected( 'content-limit', $instance['show_content'] ); ?>><?php _e( 'Show Content Limit', 'featured-custom-post-type-widget-for-genesis' ); ?></option>
-						<option value="" <?php selected( '', $instance['show_content'] ); ?>><?php _e( 'No Content', 'featured-custom-post-type-widget-for-genesis' ); ?></option>
+						<option value="content" <?php selected( 'content', $instance['show_content'] ); ?>><?php esc_attr_e( 'Show Content', 'featured-custom-post-type-widget-for-genesis' ); ?></option>
+						<option value="excerpt" <?php selected( 'excerpt', $instance['show_content'] ); ?>><?php esc_attr_e( 'Show Excerpt', 'featured-custom-post-type-widget-for-genesis' ); ?></option>
+						<option value="content-limit" <?php selected( 'content-limit', $instance['show_content'] ); ?>><?php esc_attr_e( 'Show Content Limit', 'featured-custom-post-type-widget-for-genesis' ); ?></option>
+						<option value="" <?php selected( '', $instance['show_content'] ); ?>><?php esc_attr_e( 'No Content', 'featured-custom-post-type-widget-for-genesis' ); ?></option>
 					</select>
 					<br />
-					<label for="<?php echo esc_attr( $this->get_field_id( 'content_limit' ) ); ?>"><?php _e( 'Limit content to', 'featured-custom-post-type-widget-for-genesis' ); ?>
+					<label for="<?php echo esc_attr( $this->get_field_id( 'content_limit' ) ); ?>"><?php esc_attr_e( 'Limit content to', 'featured-custom-post-type-widget-for-genesis' ); ?>
 						<input type="number" min="0" max="1000" id="<?php echo esc_attr( $this->get_field_id( 'content_limit' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'content_limit' ) ); ?>" value="<?php echo esc_attr( intval( $instance['content_limit'] ) ); ?>" size="3" />
-						<?php _e( 'characters', 'featured-custom-post-type-widget-for-genesis' ); ?>
+						<?php esc_attr_e( 'characters', 'featured-custom-post-type-widget-for-genesis' ); ?>
 					</label>
 				</p>
 
 				<p>
-					<label for="<?php echo esc_attr( $this->get_field_id( 'more_text' ) ); ?>"><?php _e( 'More Text (if applicable):', 'featured-custom-post-type-widget-for-genesis' ); ?> </label>
+					<label for="<?php echo esc_attr( $this->get_field_id( 'more_text' ) ); ?>"><?php esc_attr_e( 'More Text (if applicable):', 'featured-custom-post-type-widget-for-genesis' ); ?> </label>
 					<input type="text" id="<?php echo esc_attr( $this->get_field_id( 'more_text' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'more_text' ) ); ?>" value="<?php echo esc_attr( $instance['more_text'] ); ?>" />
 				</p>
 
@@ -610,15 +609,15 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 
 			<div class="genesis-widget-column-box">
 
-				<p><?php _e( 'To display an unordered list of more posts from this category, please fill out the information below', 'featured-custom-post-type-widget-for-genesis' ); ?>:</p>
+				<p><?php esc_attr_e( 'To display an unordered list of more posts from this category, please fill out the information below', 'featured-custom-post-type-widget-for-genesis' ); ?>:</p>
 
 				<p>
-					<label for="<?php echo esc_attr( $this->get_field_id( 'extra_title' ) ); ?>"><?php _e( 'Title:', 'featured-custom-post-type-widget-for-genesis' ); ?> </label>
+					<label for="<?php echo esc_attr( $this->get_field_id( 'extra_title' ) ); ?>"><?php esc_attr_e( 'Title:', 'featured-custom-post-type-widget-for-genesis' ); ?> </label>
 					<input type="text" id="<?php echo esc_attr( $this->get_field_id( 'extra_title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'extra_title' ) ); ?>" value="<?php echo esc_attr( $instance['extra_title'] ); ?>" class="widefat" />
 				</p>
 
 				<p>
-					<label for="<?php echo esc_attr( $this->get_field_id( 'extra_num' ) ); ?>"><?php _e( 'Number of Posts to Show:', 'featured-custom-post-type-widget-for-genesis' ); ?> </label>
+					<label for="<?php echo esc_attr( $this->get_field_id( 'extra_num' ) ); ?>"><?php esc_attr_e( 'Number of Posts to Show:', 'featured-custom-post-type-widget-for-genesis' ); ?> </label>
 					<input type="number" min="0" max="100" id="<?php echo esc_attr( $this->get_field_id( 'extra_num' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'extra_num' ) ); ?>" value="<?php echo esc_attr( $instance['extra_num'] ); ?>" size="2" />
 				</p>
 
@@ -628,20 +627,20 @@ class Genesis_Featured_Custom_Post_Type extends WP_Widget {
 
 				<p>
 					<input id="<?php echo esc_attr( $this->get_field_id( 'more_from_category' ) ); ?>" type="checkbox" name="<?php echo esc_attr( $this->get_field_name( 'more_from_category' ) ); ?>" value="1" <?php checked( $instance['more_from_category'] ); ?>/>
-					<label for="<?php echo esc_attr( $this->get_field_id( 'more_from_category' ) ); ?>"><?php _e( 'Show Category Archive Link', 'featured-custom-post-type-widget-for-genesis' ); ?></label>
+					<label for="<?php echo esc_attr( $this->get_field_id( 'more_from_category' ) ); ?>"><?php esc_attr_e( 'Show Category Archive Link', 'featured-custom-post-type-widget-for-genesis' ); ?></label>
 				</p>
 
 				<p>
-					<label for="<?php echo esc_attr( $this->get_field_id( 'more_from_category_text' ) ); ?>"><?php _e( 'Link Text:', 'featured-custom-post-type-widget-for-genesis' ); ?> </label>
+					<label for="<?php echo esc_attr( $this->get_field_id( 'more_from_category_text' ) ); ?>"><?php esc_attr_e( 'Link Text:', 'featured-custom-post-type-widget-for-genesis' ); ?> </label>
 					<input type="text" id="<?php echo esc_attr( $this->get_field_id( 'more_from_category_text' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'more_from_category_text' ) ); ?>" value="<?php echo esc_attr( $instance['more_from_category_text'] ); ?>" class="widefat" />
 				</p>
 
 				<p>
 					<input id="<?php echo esc_attr( $this->get_field_id( 'archive_link' ) ); ?>" type="checkbox" name="<?php echo esc_attr( $this->get_field_name( 'archive_link' ) ); ?>" value="1" <?php checked( $instance['archive_link'] ); ?>/>
-					<label for="<?php echo esc_attr( $this->get_field_id( 'archive_link' ) ); ?>"><?php _e( 'Show Archive Link', 'featured-custom-post-type-widget-for-genesis' ); ?></label>
+					<label for="<?php echo esc_attr( $this->get_field_id( 'archive_link' ) ); ?>"><?php esc_attr_e( 'Show Archive Link', 'featured-custom-post-type-widget-for-genesis' ); ?></label>
 				</p>
 				<p>
-					<label for="<?php echo esc_attr( $this->get_field_id( 'archive_text' ) ); ?>"><?php _e( 'Link Text:', 'featured-custom-post-type-widget-for-genesis' ); ?> </label>
+					<label for="<?php echo esc_attr( $this->get_field_id( 'archive_text' ) ); ?>"><?php esc_attr_e( 'Link Text:', 'featured-custom-post-type-widget-for-genesis' ); ?> </label>
 					<input type="text" id="<?php echo esc_attr( $this->get_field_id( 'archive_text' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'archive_text' ) ); ?>" value="<?php echo esc_attr( $instance['archive_text'] ); ?>" class="widefat" />
 				</p>
 
